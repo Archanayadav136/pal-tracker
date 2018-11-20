@@ -5,55 +5,55 @@ import java.util.HashMap;
 import java.util.List;
 
 public class InMemoryTimeEntryRepository implements TimeEntryRepository {
+    private HashMap<Long, TimeEntry> timeEntries = new HashMap<>();
+
     private long currentId = 1L;
-    HashMap<Long,TimeEntry> timeEntry_HashMap = new HashMap();
 
     @Override
     public TimeEntry create(TimeEntry timeEntry) {
         Long id = currentId++;
-        TimeEntry timeEntry_temp= new TimeEntry();
-        timeEntry_temp.setId(id);
-        timeEntry_temp.setDate(timeEntry.getDate());
-        timeEntry_temp.setHours(timeEntry.getHours());
-        timeEntry_temp.setProjectId(timeEntry.getProjectId());
-        timeEntry_temp.setUserId(timeEntry.getUserId());
-        timeEntry_HashMap.put(timeEntry_temp.getId(),timeEntry_temp);
-    return timeEntry_temp;
+
+        TimeEntry newTimeEntry = new TimeEntry(
+            id,
+            timeEntry.getProjectId(),
+            timeEntry.getUserId(),
+            timeEntry.getDate(),
+            timeEntry.getHours()
+        );
+
+        timeEntries.put(id, newTimeEntry);
+        return newTimeEntry;
     }
 
     @Override
     public TimeEntry find(Long id) {
-        if (timeEntry_HashMap.containsKey(id))
-            return timeEntry_HashMap.get(id);
-       else {
-            return null;
-        }
+        return timeEntries.get(id);
     }
 
     @Override
     public List<TimeEntry> list() {
-        return new ArrayList<>(timeEntry_HashMap.values());
+        return new ArrayList<>(timeEntries.values());
     }
+
     @Override
     public TimeEntry update(Long id, TimeEntry timeEntry) {
-        if (timeEntry_HashMap.containsKey(id)){
-     /*   TimeEntry timeEntry_update= new TimeEntry();
-        timeEntry_update.setId();
-        timeEntry_update.setDate(timeEntry.getDate());
-        timeEntry_update.setHours(timeEntry.getHours());
-        timeEntry_update.setProjectId(timeEntry.getProjectId());
-        timeEntry.setUserId(timeEntry_update.getUserId());*/
-     timeEntry.setId(id);
-            timeEntry_HashMap.replace(id,timeEntry);
-            return timeEntry_HashMap.get(id);
-        }
-        else
-            return null;
+        if (find(id) == null) return null;
+
+        TimeEntry updatedEntry = new TimeEntry(
+            id,
+            timeEntry.getProjectId(),
+            timeEntry.getUserId(),
+            timeEntry.getDate(),
+            timeEntry.getHours()
+        );
+
+        timeEntries.replace(id, updatedEntry);
+        return updatedEntry;
     }
 
     @Override
     public void delete(Long id) {
-        timeEntry_HashMap.remove(id);
-
+        timeEntries.remove(id);
     }
 }
+
