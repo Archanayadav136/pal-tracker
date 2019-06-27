@@ -27,9 +27,9 @@ public class JdbcTimeEntryRepository implements TimeEntryRepository {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO time_entries (project_id, user_id, date, hours) " +
-                    "VALUES (?, ?, ?, ?)",
-                RETURN_GENERATED_KEYS
+                    "INSERT INTO time_entries (project_id, user_id, date, hours) " +
+                            "VALUES (?, ?, ?, ?)",
+                    RETURN_GENERATED_KEYS
             );
 
             statement.setLong(1, timeEntry.getProjectId());

@@ -12,7 +12,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/time-entries")
 public class TimeEntryController {
-
     private TimeEntryRepository timeEntriesRepo;
     private final DistributionSummary timeEntrySummary;
     private final Counter actionCounter;
@@ -73,4 +72,3 @@ public class TimeEntryController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
-
